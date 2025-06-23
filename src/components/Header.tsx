@@ -10,7 +10,6 @@ const { Search } = Input;
 function Header({addNewContact}: HeaderPropsType) {
     
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        
     }
 
     return (

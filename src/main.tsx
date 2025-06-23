@@ -4,11 +4,14 @@ import './index.css'
 import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from './store/contactStore.ts'
+import { MessageProvider } from './contexts/MessageProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-       <App />
+      <MessageProvider>
+         <App />
+      </MessageProvider>
     </Provider>
-  </StrictMode>,
+  </StrictMode>
 )

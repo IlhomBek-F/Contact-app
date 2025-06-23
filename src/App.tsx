@@ -6,6 +6,7 @@ import { ContactDrawer } from "./components/ContactDrawer";
 import { useState } from "react";
 import type { ContactType } from "./core/models/ContactModel";
 import type { ContactDrawerState } from "./core/models/DrawerStateModel";
+import 'antd/dist/reset.css';
 
 function App() {
   const [contactFormDrawerState, setContactFormDrawerState] = useState<ContactDrawerState>({open: false, payload: null});

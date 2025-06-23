@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { StateModel } from "../../core/models/StateModel";
 import type { ContactType } from "../../core/models/ContactModel";
-import { getContacts } from "../../api";
+import { deleteContact, getContacts, saveContact, updateContact } from "../../api";
 
 export const AsyncThunkType = {
     FETCH_CONTACTS:  'contact/get',
@@ -20,9 +20,9 @@ const initialState = {
 
 export const AsyncThunkMap = new Map<string, any>([
     [AsyncThunkType.FETCH_CONTACTS, createAsyncThunk(AsyncThunkType.FETCH_CONTACTS, getContacts)],
-    // [AsyncThunkType.ADD_CONTACT, createAsyncThunk(AsyncThunkType.ADD_CONTACT, saveTask)],
-    // [AsyncThunkType.DELETE_CONTACT, createAsyncThunk(AsyncThunkType.DELETE_CONTACT, deleteTask)],
-    // [AsyncThunkType.UPDATE_CONTACT, createAsyncThunk(AsyncThunkType.UPDATE_CONTACT, updateTask)],
+    [AsyncThunkType.ADD_CONTACT, createAsyncThunk(AsyncThunkType.ADD_CONTACT, saveContact)],
+    [AsyncThunkType.DELETE_CONTACT, createAsyncThunk(AsyncThunkType.DELETE_CONTACT, deleteContact)],
+    [AsyncThunkType.UPDATE_CONTACT, createAsyncThunk(AsyncThunkType.UPDATE_CONTACT, updateContact)],
 ])
 
 const contactSlice = createSlice({
@@ -56,32 +56,32 @@ const contactSlice = createSlice({
             state.loadingContacts = false;
         })
 
-        // builder.addCase(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT).pending, (state: StateModel) => {
-        //     state.savingContact = true
-        // }).addCase(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT).fulfilled, (state: StateModel, { payload }) => {
-        //     state.contacts = payload
-        //     state.savingContact = true
-        // }).addCase(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT).rejected, (state: StateModel) => {
-        //     state.savingContact = false
-        // })
+        .addCase(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT).pending, (state: StateModel) => {
+            state.savingContact = true
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT).fulfilled, (state: StateModel, { payload }) => {
+            state.contacts.push(payload)
+            state.savingContact = false
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT).rejected, (state: StateModel) => {
+            state.savingContact = false
+        })
 
-        //  builder.addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_CONTACT).pending, (state: StateModel) => {
-        //     state.savingContact = true
-        // }).addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_CONTACT).fulfilled, (state: StateModel, { payload }) => {
-        //     state.contacts = payload
-        //     state.savingContact = true
-        // }).addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_CONTACT).rejected, (state: StateModel) => {
-        //     state.savingContact = false
-        // })
+        .addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_CONTACT).pending, (state: StateModel) => {
+            state.savingContact = true
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_CONTACT).fulfilled, (state: StateModel, { payload }) => {
+            state.contacts = state.contacts.map((contact: ContactType) => contact.id === payload.id ? payload : contact)
+            state.savingContact = false
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_CONTACT).rejected, (state: StateModel) => {
+            state.savingContact = false
+        })
         
-        // .addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT).pending, (state: StateModel) => {
-        //     state.deletingContact = true;
-        // }).addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT).fulfilled, (state: StateModel, { payload }) => {
-        //     state.contacts = payload;
-        //     state.deletingContact = true;
-        // }).addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT).rejected, (state: StateModel) => {
-        //     state.deletingContact = true;
-        // })
+        .addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT).pending, (state: StateModel) => {
+            state.deletingContact = true;
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT).fulfilled, (state: StateModel, { payload }) => {
+            state.contacts = state.contacts.filter(({id}: ContactType) => id !== payload);
+            state.deletingContact = true;
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT).rejected, (state: StateModel) => {
+            state.deletingContact = true;
+        })
     }
 })
 

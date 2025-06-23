@@ -5,20 +5,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { StateModel } from '../core/models/StateModel';
 import { useEffect } from 'react';
 import { AsyncThunkMap, AsyncThunkType } from '../store/slices/contactSlice';
-
-
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useMessageProvider } from '../contexts/MessageProvider';
 
 type ContentPropsType = {
     openContactFormDrawer: (payload: ContactType) => void
 }
 
 function Content({openContactFormDrawer}: ContentPropsType) {
+    const {callAsyncMessage} = useMessageProvider() as any
+
     const dispatch = useDispatch<any>();
-    const  loading = useSelector((state: StateModel) => state.loadingContacts);
-    const  contacts = useSelector((state: StateModel) => state.contacts);
+    const loading = useSelector((state: StateModel) => state.loadingContacts);
+    const contacts = useSelector((state: StateModel) => state.contacts);
     
-    const confirm = () => {
-      message.info('Clicked on Yes.');
+    const confirm = (id: number) => {
+      const hideMessage = callAsyncMessage("Deleting contact...", "Succees. Contact deleted")
+      dispatch(AsyncThunkMap.get(AsyncThunkType.DELETE_CONTACT)(id))
+       .then(unwrapResult)
+       .then(hideMessage)
     };
 
     useEffect(() => {
@@ -34,10 +39,10 @@ function Content({openContactFormDrawer}: ContentPropsType) {
                         <Button shape="circle" icon={<EditOutlined />} onClick={() => openContactFormDrawer(item)}/>,
                         <Popconfirm placement="bottomRight"
                                     title='Are you sure to delete this contact?'
-                                    onConfirm={confirm}
                                     okText="Yes"
+                                    onConfirm={() => confirm(item.id)}
                                     cancelText="No">
-                                    <Button shape="circle" danger icon={<DeleteOutlined />}/>
+                                    <Button shape="circle" danger icon={<DeleteOutlined />} />
                         </Popconfirm>
                      ]}>
                      <List.Item.Meta
