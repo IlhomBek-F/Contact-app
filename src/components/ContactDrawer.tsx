@@ -6,7 +6,7 @@ import { AsyncThunkMap, AsyncThunkType } from "../store/slices/contactSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useMessageProvider } from "../contexts/MessageProvider";
 import { useEffect } from "react";
-import { validateMessages } from "../utils/formValidation";
+import { validateMessages } from "../utils";
 
 type ContactDrawerPropsType = {
     open: boolean,

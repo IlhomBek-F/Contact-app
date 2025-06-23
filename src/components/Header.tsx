@@ -1,5 +1,9 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
+import { useEffect, useState } from "react";
+import { useDebounce } from "../hooks/useDebounce";
+import { AsyncThunkMap, AsyncThunkType } from "../store/slices/contactSlice";
+import { useDispatch } from "react-redux";
 
 type HeaderPropsType = {
     addNewContact: () => void
@@ -8,9 +12,17 @@ type HeaderPropsType = {
 const { Search } = Input;
 
 function Header({addNewContact}: HeaderPropsType) {
-    
+    const [searchTerm, setSearchTerm] = useState<string>('')
+    const debouncedSearchTerm = useDebounce(searchTerm)
+    const dispatch = useDispatch();
+
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value)
     }
+
+    useEffect(() => {
+        dispatch(AsyncThunkMap.get(AsyncThunkType.FETCH_CONTACTS)(debouncedSearchTerm));
+    }, [debouncedSearchTerm]);
 
     return (
         <header className="flex justify-between gap-2">

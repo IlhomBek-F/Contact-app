@@ -28,11 +28,12 @@ const data = [
 ];
 
 
-export async function getContacts() {
+export async function getContacts(query: string = '') {
     try {
         const tasks = await new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(data)
+                const res = data.slice().filter(({email, name}: ContactType) => email.toLowerCase().includes(query.toLowerCase()) || name.toLowerCase().includes(query.toLowerCase()))
+                resolve(res)
             }, 2000)
         })
         return tasks

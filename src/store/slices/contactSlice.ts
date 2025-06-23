@@ -28,24 +28,7 @@ export const AsyncThunkMap = new Map<string, any>([
 const contactSlice = createSlice({
     name: 'contact',
     initialState,
-    reducers: {
-        filterByDate: (state, { payload }) => {
-            const data = JSON.parse(localStorage.getItem('tasks') || '[]');
-            state.contacts = data.filter((task: ContactType) => task.dueTo === payload)
-        },
-
-        filterByStatus: ((state, { payload }) => {
-            const data = JSON.parse(localStorage.getItem('contacts') || '[]');
-            state.selectedStatus = payload;
-            if (payload === 2) {
-                state.contacts = data;
-                return;
-            }
-
-            state.contacts = data.filter((task: ContactType) => task.completed === Boolean(payload))
-        }),
-
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(AsyncThunkMap.get(AsyncThunkType.FETCH_CONTACTS).pending, (state: StateModel) => {
             state.loadingContacts = true;
@@ -86,5 +69,4 @@ const contactSlice = createSlice({
 })
 
 
-export const { filterByDate, filterByStatus } = contactSlice.actions;
 export default contactSlice.reducer
