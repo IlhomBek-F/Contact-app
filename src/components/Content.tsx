@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Avatar, Button, List, message, Popconfirm } from 'antd';
+import { Avatar, Button, List, message, Popconfirm, Skeleton } from 'antd';
 import type { ContactType } from '../core/models/ContactModel';
 import { useDispatch, useSelector } from 'react-redux';
 import type { StateModel } from '../core/models/StateModel';
@@ -32,10 +32,10 @@ function Content({openContactFormDrawer}: ContentPropsType) {
 
     return (
         <section>
-          {loading && <span>Loading...</span> || <List itemLayout="horizontal"
-                 dataSource={contacts}
+          <List itemLayout="horizontal"
+                 dataSource={(loading ? [1,2,3,4] : contacts) as ContactType[]}
                  renderItem={item => (
-                   <List.Item actions={[
+                   <List.Item actions={!loading ? [
                         <Button shape="circle" icon={<EditOutlined />} onClick={() => openContactFormDrawer(item)}/>,
                         <Popconfirm placement="bottomRight"
                                     title='Are you sure to delete this contact?'
@@ -44,17 +44,19 @@ function Content({openContactFormDrawer}: ContentPropsType) {
                                     cancelText="No">
                                     <Button shape="circle" danger icon={<DeleteOutlined />} />
                         </Popconfirm>
-                     ]}>
-                     <List.Item.Meta
-                       avatar={<Avatar className='!text-[#f56a00] !bg-[#fde3cf]'>{item.name && item.name[0]}</Avatar>}
-                       title={item.name}
-                       description={<div className='flex flex-col'>
+                     ] : undefined}>
+                     <Skeleton loading={loading} active avatar>
+              <List.Item.Meta
+                avatar={<Avatar className='!text-[#f56a00] !bg-[#fde3cf]'>{item.name && item.name[0]}</Avatar>}
+                title={item.name}
+                description={<div className='flex flex-col'>
                                      <span>{item.email}</span>
                                      <span>{item.phone}</span>
                                    </div>}
-                     />
+               />
+            </Skeleton>
             </List.Item>
-        )}/>}
+        )}/>
            
         </section>
     )
