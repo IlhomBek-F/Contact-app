@@ -42,11 +42,12 @@ export async function getContacts(query: string = '') {
     }
 }
 
-export async function saveContact(data: ContactType) {
+export async function saveContact(newContact: ContactType) {
     try {
         const res = await new Promise((resolve, reject) => {
             setTimeout(() => {
-              resolve(data)
+              data.push(newContact)
+              resolve(newContact)
             }, 2500)
         })
 
