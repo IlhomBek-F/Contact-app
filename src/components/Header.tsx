@@ -1,10 +1,13 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
 
+type HeaderPropsType = {
+    addNewContact: () => void
+}
+
 const { Search } = Input;
 
-
-function Header() {
+function Header({addNewContact}: HeaderPropsType) {
     
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         
@@ -16,7 +19,7 @@ function Header() {
                     onChange={onSearch} 
                     allowClear={true}
                     />
-            <Button shape="circle" icon={<PlusCircleOutlined size={40}/>} />
+            <Button shape="circle" icon={<PlusCircleOutlined size={40}/>} onClick={() => addNewContact()}/>
         </header>
     )
 }

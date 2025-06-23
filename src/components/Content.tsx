@@ -1,20 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Avatar, Button, Drawer, List, message, Popconfirm, Space } from 'antd';
-import { useState } from 'react';
-import { ContactForm, type ContactFormMode } from '../shared/ContactForm';
-import type { ContactType } from '../models/ContactModel';
-
-type ContactFormDrawerState = {
-  open: boolean;
-  mode: ContactFormMode | null;
-  payload?: ContactType;
-};
-
-const initialContactFormDrawerState: ContactFormDrawerState = {
-  open: false,
-  mode: null,
-  payload: undefined,
-};
+import { Avatar, Button, List, message, Popconfirm } from 'antd';
 
 const data = [
   {
@@ -31,23 +16,18 @@ const data = [
   },
 ];
 
-function Content() {
-    const [contactFormDrawerState, setContactFormDrawerState] = useState<ContactFormDrawerState>(initialContactFormDrawerState);
+type ContentPropsType = {
+    openContactFormDrawer: () => void
+}
+
+function Content({openContactFormDrawer}: ContentPropsType) {
     
     const confirm = () => {
       message.info('Clicked on Yes.');
     };
 
-    const openContactFormDrawer = (mode: ContactFormMode | null, payload?: ContactType) => {
-         setContactFormDrawerState({open: true, mode, payload})
-    }
-
-    const closeContactFormDrawer = () => {
-        setContactFormDrawerState(initialContactFormDrawerState)
-    }
-
     const itemAction = {
-    edit: <Button shape="circle" icon={<EditOutlined />} onClick={() => openContactFormDrawer('edit')}/>,
+    edit: <Button shape="circle" icon={<EditOutlined />} onClick={openContactFormDrawer}/>,
     delete: <Popconfirm
         placement="bottomRight"
         title='Are you sure to delete this contact?'
@@ -75,26 +55,6 @@ function Content() {
                      />
             </List.Item>
         )}/>
-        <Drawer
-        title="Drawer with extra actions"
-        placement='bottom'
-        width={500}
-        height={250}
-        getContainer={false}
-        onClose={closeContactFormDrawer}
-        style={{ position: 'absolute' }}
-        open={contactFormDrawerState.open}
-        extra={
-          <Space>
-            <Button onClick={closeContactFormDrawer}>Cancel</Button>
-            <Button type="primary" onClick={closeContactFormDrawer}>
-              OK
-            </Button>
-          </Space>
-        }
-      >
-        <ContactForm mode='add'/>
-      </Drawer>
         </section>
     )
 }

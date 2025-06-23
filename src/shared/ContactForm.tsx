@@ -1,21 +1,12 @@
-import { Button, Form, Input } from "antd"
+import { Form, Input } from "antd"
 import type { ContactType } from "../models/ContactModel"
-
-export type ContactFormMode = 'edit' | 'add'
+import { validateMessages } from "../utils/formValidation";
 
 export type ContactFormProps = {
-    mode: ContactFormMode,
-    payload?: ContactType
+    payload?: ContactType | null
 }
 
 function ContactForm(props: ContactFormProps) {
-  const validateMessages = {
-        required: '${label} is required!',
-        types: {
-          email: '${label} is not a valid email!',
-        },
-   };
-
      const onFinish = (values: any) => {
        console.log('Success:', values);
      };
