@@ -1,60 +1,56 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Button, List, message, Popconfirm } from 'antd';
+import type { ContactType } from '../core/models/ContactModel';
+import { useDispatch, useSelector } from 'react-redux';
+import type { StateModel } from '../core/models/StateModel';
+import { useEffect } from 'react';
+import { AsyncThunkMap, AsyncThunkType } from '../store/slices/contactSlice';
 
-const data = [
-  {
-    title: 'John',
-  },
-  {
-    title: 'Doe',
-  },
-  {
-    title: 'Susan',
-  },
-  {
-    title: 'Eric',
-  },
-];
+
 
 type ContentPropsType = {
-    openContactFormDrawer: () => void
+    openContactFormDrawer: (payload: ContactType) => void
 }
 
 function Content({openContactFormDrawer}: ContentPropsType) {
+    const dispatch = useDispatch<any>();
+    const  loading = useSelector((state: StateModel) => state.loadingContacts);
+    const  contacts = useSelector((state: StateModel) => state.contacts);
     
     const confirm = () => {
       message.info('Clicked on Yes.');
     };
 
-    const itemAction = {
-    edit: <Button shape="circle" icon={<EditOutlined />} onClick={openContactFormDrawer}/>,
-    delete: <Popconfirm
-        placement="bottomRight"
-        title='Are you sure to delete this contact?'
-        onConfirm={confirm}
-        okText="Yes"
-        cancelText="No"
-      >
-        <Button shape="circle" danger icon={<DeleteOutlined />}/>
-      </Popconfirm>
-}
+    useEffect(() => {
+      dispatch(AsyncThunkMap.get(AsyncThunkType.FETCH_CONTACTS)());
+    }, [])
 
     return (
-        <section className='overflow-hidden relative'>
-           <List itemLayout="horizontal"
-                 dataSource={data}
+        <section>
+          {loading && <span>Loading...</span> || <List itemLayout="horizontal"
+                 dataSource={contacts}
                  renderItem={item => (
-                   <List.Item actions={[itemAction.edit, itemAction.delete]}>
+                   <List.Item actions={[
+                        <Button shape="circle" icon={<EditOutlined />} onClick={() => openContactFormDrawer(item)}/>,
+                        <Popconfirm placement="bottomRight"
+                                    title='Are you sure to delete this contact?'
+                                    onConfirm={confirm}
+                                    okText="Yes"
+                                    cancelText="No">
+                                    <Button shape="circle" danger icon={<DeleteOutlined />}/>
+                        </Popconfirm>
+                     ]}>
                      <List.Item.Meta
-                       avatar={<Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>{item.title[0]}</Avatar>}
-                       title={<a href="https://ant.design">{item.title}</a>}
+                       avatar={<Avatar className='!text-[#f56a00] !bg-[#fde3cf]'>{item.name && item.name[0]}</Avatar>}
+                       title={item.name}
                        description={<div className='flex flex-col'>
-                        <span>example@gmail.com</span>
-                        <span>888281211</span>
-                       </div>}
+                                     <span>{item.email}</span>
+                                     <span>{item.phone}</span>
+                                   </div>}
                      />
             </List.Item>
-        )}/>
+        )}/>}
+           
         </section>
     )
 }

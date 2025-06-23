@@ -4,8 +4,8 @@ import { Content } from "./components/Content";
 import { Header } from "./components/Header";
 import { ContactDrawer } from "./components/ContactDrawer";
 import { useState } from "react";
-import type { ContactType } from "./models/ContactModel";
-import type { ContactDrawerState } from "./models/DrawerStateModel";
+import type { ContactType } from "./core/models/ContactModel";
+import type { ContactDrawerState } from "./core/models/DrawerStateModel";
 
 function App() {
   const [contactFormDrawerState, setContactFormDrawerState] = useState<ContactDrawerState>({open: false, payload: null});
