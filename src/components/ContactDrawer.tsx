@@ -15,23 +15,24 @@ type ContactDrawerPropsType = {
 }
 
 function ContactDrawer({open, payload, closeContactFormDrawer}: ContactDrawerPropsType) {
-    const [form] = Form.useForm();
-    const {callAsyncMessage} = useMessageProvider() as any
+  const [form] = Form.useForm();
+  const dispatch = useDispatch<any>();
+  const {callAsyncMessage} = useMessageProvider() as any
+  const loading = useSelector((state: StateModel) => state.savingContact);
 
-    const dispatch = useDispatch<any>();
-    const loading = useSelector((state: StateModel) => state.savingContact);
     
-    const saveContact = () => {
-      const hideMessage = callAsyncMessage('Saving new contact...', 'Success');
-      const newContact = {id: Date.now(), ...form.getFieldsValue()}
+  const saveContact = () => {
+    const hideMessage = callAsyncMessage('Saving new contact...', 'Success');
+    const newContact = {id: Date.now(), ...form.getFieldsValue()}
 
-      dispatch(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT)(newContact))
-        .then(unwrapResult)
-        .then(() => {
-          hideMessage()
-          closeContactFormDrawer()
-        });
-    }
+    dispatch(AsyncThunkMap.get(AsyncThunkType.ADD_CONTACT)(newContact))
+      .then(unwrapResult)
+      .then(() => {
+        hideMessage()
+        form.resetFields()
+        closeContactFormDrawer()
+      });
+  }
 
     const updateContact = () => {
       const hideMessage = callAsyncMessage('Updating contact...', 'Success')

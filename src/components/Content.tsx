@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Avatar, Button, List, message, Popconfirm, Skeleton } from 'antd';
+import { Avatar, Button, List, Popconfirm, Skeleton } from 'antd';
 import type { ContactType } from '../core/models/ContactModel';
 import { useDispatch, useSelector } from 'react-redux';
 import type { StateModel } from '../core/models/StateModel';
@@ -45,19 +45,16 @@ function Content({openContactFormDrawer}: ContentPropsType) {
                                     <Button shape="circle" danger icon={<DeleteOutlined />} />
                         </Popconfirm>
                      ] : undefined}>
-                     <Skeleton loading={loading} active avatar>
-              <List.Item.Meta
-                avatar={<Avatar className='!text-[#f56a00] !bg-[#fde3cf]'>{item.name && item.name[0]}</Avatar>}
-                title={item.name}
-                description={<div className='flex flex-col'>
-                                     <span>{item.email}</span>
-                                     <span>{item.phone}</span>
-                                   </div>}
-               />
-            </Skeleton>
+                     <Skeleton loading={loading} active avatar >
+                     <List.Item.Meta avatar={<Avatar className='!text-[#f56a00] !bg-[#fde3cf]'>{item.name && item.name[0]}</Avatar>}
+                                     title={item.name}
+                                     description={<div className='flex flex-col'>
+                                                <span>{item.email}</span>
+                                                <span>{item.phone}</span>
+                                           </div>}/>
+                    </Skeleton>
             </List.Item>
         )}/>
-           
         </section>
     )
 }

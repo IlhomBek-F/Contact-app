@@ -12,13 +12,9 @@ type HeaderPropsType = {
 const { Search } = Input;
 
 function Header({addNewContact}: HeaderPropsType) {
-    const [searchTerm, setSearchTerm] = useState<string>('')
-    const debouncedSearchTerm = useDebounce(searchTerm)
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const debouncedSearchTerm = useDebounce(searchTerm);
     const dispatch = useDispatch();
-
-    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value)
-    }
 
     useEffect(() => {
         dispatch(AsyncThunkMap.get(AsyncThunkType.FETCH_CONTACTS)(debouncedSearchTerm));
@@ -27,7 +23,7 @@ function Header({addNewContact}: HeaderPropsType) {
     return (
         <header className="flex justify-between gap-2">
             <Search placeholder="search..." 
-                    onChange={onSearch} 
+                    onChange={(e) => setSearchTerm(e.target.value)} 
                     allowClear={true}
                     />
             <Button shape="circle" icon={<PlusCircleOutlined size={40}/>} onClick={() => addNewContact()}/>

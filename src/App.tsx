@@ -20,12 +20,12 @@ function App() {
   }
 
   return (
-    <>
-      <Card title={<Header addNewContact={openContactFormDrawer}/>} className="w-[600px] relative overflow-hidden">
+    <div className="relative overflow-hidden">
+      <Card title={<Header addNewContact={openContactFormDrawer}/>} className="w-[600px] min-h-[600px] max-h-[800px] overflow-auto" >
             <Content openContactFormDrawer={openContactFormDrawer}/>
-            <ContactDrawer {...contactFormDrawerState} closeContactFormDrawer={closeContactFormDrawer} />
       </Card>
-    </>
+     <ContactDrawer {...contactFormDrawerState} closeContactFormDrawer={closeContactFormDrawer} />
+    </div>
   );
 }
 
