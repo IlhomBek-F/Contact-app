@@ -6,7 +6,6 @@ import { ContactDrawer } from "./components/ContactDrawer";
 import { useState } from "react";
 import type { ContactType } from "./core/models/ContactModel";
 import type { ContactDrawerState } from "./core/models/DrawerStateModel";
-import 'antd/dist/reset.css';
 
 function App() {
   const [contactFormDrawerState, setContactFormDrawerState] = useState<ContactDrawerState>({open: false, payload: null});
@@ -20,8 +19,8 @@ function App() {
   }
 
   return (
-    <div className="relative overflow-hidden">
-      <Card title={<Header addNewContact={openContactFormDrawer}/>} className="w-[600px] min-h-[600px] max-h-[800px] overflow-auto" >
+    <div className="relative overflow-hidden w-full max-w-[600px]">
+      <Card title={<Header addNewContact={openContactFormDrawer}/>} className="w-full min-h-[600px] max-h-[800px] overflow-auto" >
             <Content openContactFormDrawer={openContactFormDrawer}/>
       </Card>
      <ContactDrawer {...contactFormDrawerState} closeContactFormDrawer={closeContactFormDrawer} />
