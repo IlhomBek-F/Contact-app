@@ -30,7 +30,7 @@ const data = [
 
 export async function getContacts(query: string = '') {
     try {
-        const tasks = await new Promise((resolve, reject) => {
+        const tasks = await new Promise((resolve, _) => {
             setTimeout(() => {
                 const res = data.slice().filter(({email, name}: ContactType) => email.toLowerCase().includes(query.toLowerCase()) || name.toLowerCase().includes(query.toLowerCase()))
                 resolve(res)
@@ -44,7 +44,7 @@ export async function getContacts(query: string = '') {
 
 export async function saveContact(newContact: ContactType) {
     try {
-        const res = await new Promise((resolve, reject) => {
+        const res = await new Promise((resolve, _) => {
             setTimeout(() => {
               data.push(newContact)
               resolve(newContact)
@@ -59,7 +59,7 @@ export async function saveContact(newContact: ContactType) {
 
 export async function updateContact(data: ContactType) {
     try {
-        const res = await new Promise((resolve, reject) => {
+        const res = await new Promise((resolve, _) => {
             setTimeout(() => {
               resolve(data)
             }, 2500)
@@ -73,7 +73,7 @@ export async function updateContact(data: ContactType) {
 
 export async function deleteContact(id: number) {
     try {
-        const res = await new Promise((resolve, reject) => {
+        const res = await new Promise((resolve, _) => {
             setTimeout(() => {
               resolve(id)
             }, 2500)
