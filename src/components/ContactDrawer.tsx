@@ -1,4 +1,4 @@
-import { Button, Drawer, Form, Input, InputNumber, Space } from "antd";
+import { Button, Drawer, Form, Space } from "antd";
 import type { ContactType } from "../core/models/ContactModel";
 import { useDispatch, useSelector } from "react-redux";
 import type { StateModel } from "../core/models/StateModel";
@@ -6,7 +6,7 @@ import { AsyncThunkMap, AsyncThunkType } from "../store/slices/contactSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useMessageProvider } from "../contexts/MessageProvider";
 import { useEffect } from "react";
-import { validateMessages } from "../utils";
+import { ContactForm } from "./ContactForm";
 
 type ContactDrawerPropsType = {
     open: boolean,
@@ -68,32 +68,7 @@ function ContactDrawer({open, payload, closeContactFormDrawer}: ContactDrawerPro
                    </Space>
                  }
           >
-         <Form name="basic"
-              form={form}
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 16 }}
-              initialValues={{ remember: true }}
-              validateMessages={validateMessages}
-              autoComplete="off"
-            >
-               <Form.Item
-                 label="Username"
-                 name="name"
-                 rules={[{ required: true, message: 'Please input your username!' }]}>
-                <Input />
-               </Form.Item>
-               <Form.Item label="Email"
-                        name="email"
-                        rules={[{ required: true, message: 'Please input your email!', type: "email" }]}
-                >
-               <Input />
-              </Form.Item>
-              <Form.Item name="phone"
-                         label="Phone Number"
-                         rules={[{ required: true, message: 'Please input your phone number!' }]}>
-               <InputNumber addonBefore={+992} style={{ width: '100%' }} />
-              </Form.Item>
-        </Form>
+          <ContactForm form={form}/>
         </Drawer>
     )
 }
